@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Affiliate Link Generator</title>
+    <style>
+        /* --- CSS Variables for Theming --- */
+        :root {
+            /* Light Theme (Default) */
+            --bg-color: #e0e5ec;
+            --text-color: #333;
+            --text-color-light: #666;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --primary-color: #007bff;
+            --primary-color-hover: #0056b3;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --error-shadow: rgba(220, 53, 69, 0.3);
+            --transition-speed: 0.3s;
+        }
+
+        body.dark-theme {
+            /* Dark Theme Overrides */
+            --bg-color: #2c3038;
+            --text-color: #e0e5ec;
+            --text-color-light: #a3b1c6;
+            --shadow-light: #3a3f4a;
+            --shadow-dark: #1d2025;
+            --primary-color: #4dabf7; /* Lighter blue for better contrast */
+            --primary-color-hover: #1f9aff;
+            --error-shadow: rgba(255, 107, 107, 0.3);
+        }
+
+        /* --- Basic Reset & Font --- */
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        /* --- Theme Toggle Button --- */
+        #theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light);
+            transition: all var(--transition-speed) ease;
+        }
+        #theme-toggle:hover {
+             box-shadow: 
+                inset 2px 2px 5px var(--shadow-dark),
+                inset -3px -3px 7px var(--shadow-light);
+        }
+        
+        /* --- Main Neumorphic Card Styling --- */
+        .card {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-color);
+            padding: 2.5rem;
+            margin: 1rem;
+            border-radius: 20px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            text-align: center;
+            box-sizing: border-box;
+            color: var(--text-color-light);
+            transition: all var(--transition-speed) ease;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* --- Input & Button Groups (Neumorphic) --- */
+        .input-group, .output-group {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="url"], input[type="text"] {
+            flex-grow: 1;
+            padding: 1rem 1.25rem;
+            border: none;
+            background: var(--bg-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            color: var(--text-color);
+            box-shadow: 
+                inset 2px 2px 5px var(--shadow-dark),
+                inset -3px -3px 7px var(--shadow-light);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        input::placeholder {
+            color: var(--text-color-light);
+            opacity: 0.8;
+        }
+
+        input[type="url"]:focus {
+            box-shadow: 
+                inset 3px 3px 7px var(--shadow-dark),
+                inset -4px -4px 9px var(--shadow-light);
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            margin-left: 1rem;
+            box-shadow: 
+                6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        #generateBtn:hover, .output-group button:hover:not(.copied) {
+            color: white;
+            background-color: var(--primary-color);
+            box-shadow: 
+                inset 2px 2px 5px var(--shadow-dark),
+                inset -3px -3px 7px var(--shadow-light);
+        }
+        
+        .output-group { display: none; }
+        
+        .output-group button.copied {
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 
+                inset 2px 2px 5px var(--shadow-dark),
+                inset -3px -3px 7px var(--shadow-light);
+        }
+
+        .error-message {
+            display: none;
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--error-color);
+            box-shadow: 
+                inset 2px 2px 5px var(--error-shadow),
+                inset -3px -3px 7px var(--shadow-light);
+            border: 1px solid var(--error-shadow);
+        }
+        
+        .important-note {
+            background: var(--bg-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2.5rem;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-color-light);
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .important-note strong {
+            color: var(--text-color);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle">🌙</button>
+
+    <div class="card">
+        <h1>Amazon Affiliate Link Generator</h1>
+        <p>Paste any Amazon product URL below. This tool will automatically add Shashwat's affiliate tag and create a clean link for you to share.</p>
+        
+        <div class="input-group">
+            <input
+                type="url"
+                id="originalUrlInput"
+                placeholder="Paste Amazon product URL here..."
+            />
+            <button id="generateBtn">Generate</button>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div id="outputGroup" class="output-group">
+            <input type="text" id="affiliateUrlOutput" readonly />
+            <button id="copyBtn">Copy</button>
+        </div>
+
+        <div class="important-note">
+            <strong>Important Note:</strong> If the link is used and a qualifying purchase within a <strong>24-hour window is not made</strong>, the sale will not be credited to Shashwat's Amazon Associates account.
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const YOUR_AFFILIATE_TAG = 'shashwat15-21'; 
+
+        // --- DOM Elements ---
+        const originalUrlInput = document.getElementById('originalUrlInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const outputGroup = document.getElementById('outputGroup');
+        const affiliateUrlOutput = document.getElementById('affiliateUrlOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // --- THEME TOGGLE LOGIC ---
+        // Function to set the theme
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeToggle.textContent = '🌙';
+            }
+        }
+
+        // Event listener for the toggle button
+        themeToggle.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.contains('dark-theme');
+            setTheme(isDarkMode ? 'light' : 'dark');
+        });
+
+        // Check for saved theme preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        });
+        
+        // --- Core Link Generator Functions ---
+        function generateLink() {
+            errorMessage.style.display = 'none';
+            outputGroup.style.display = 'none';
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+
+            const originalUrl = originalUrlInput.value;
+
+            if (!originalUrl) {
+                showError('Please paste a URL first.');
+                return;
+            }
+
+            const regex = /\/(dp|gp\/product)\/([A-Z0-9]{10})/;
+            const match = originalUrl.match(regex);
+
+            if (match && match[2]) {
+                const asin = match[2];
+                const newUrl = `https://www.amazon.in/dp/${asin}/?tag=${YOUR_AFFILIATE_TAG}`;
+                affiliateUrlOutput.value = newUrl;
+                outputGroup.style.display = 'flex';
+            } else {
+                showError('Could not find a valid Product ID (ASIN) in the URL. Please check the link.');
+            }
+        }
+
+        function copyToClipboard() {
+            if (!affiliateUrlOutput.value) return;
+
+            navigator.clipboard.writeText(affiliateUrlOutput.value).then(() => {
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                showError('Failed to copy the link.');
+            });
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        // --- Event Listeners ---
+        generateBtn.addEventListener('click', generateLink);
+        copyBtn.addEventListener('click', copyToClipboard);
+        originalUrlInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') generateLink();
+        });
+    </script>
+
+</body>
+</html>
