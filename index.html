@@ -151,7 +151,7 @@
                 6px 6px 12px var(--shadow-dark),
                 -6px -6px 12px var(--shadow-light);
             transition: all var(--transition-speed) ease;
-            white-space: nowrap; /* Prevents text wrapping on small screens */
+            white-space: nowrap;
         }
         
         #generateBtn:hover, .output-group button:hover:not(.copied) {
@@ -254,11 +254,51 @@
             padding: 0 20px;
             min-height: 1.5em;
         }
+
+        /* --- NEW: Mobile Blocker (The Gatekeeper) --- */
+        .mobile-message {
+            display: none; /* Hidden on Desktop */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            max-width: 90%;
+        }
+
+        .mobile-message h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-message p {
+            font-size: 1.2rem;
+            color: var(--text-color-light);
+        }
+
+        /* The Magic Query: If screen is smaller than 768px (Phones) */
+        @media (max-width: 768px) {
+            .card {
+                display: none !important; /* Hide the app */
+            }
+            .mobile-message {
+                display: flex !important; /* Show the warning */
+            }
+            #theme-toggle {
+                top: 15px; right: 15px; /* Adjust theme button slightly */
+            }
+        }
     </style>
 </head>
 <body>
 
     <button id="theme-toggle">🌙</button>
+
+    <div class="mobile-message">
+        <h2>💻<br>Computer Required</h2>
+        <p>This tool is restricted to Laptops, Desktops, and Tablets.</p>
+        <p>Affiliate links cannot be generated reliably on mobile phones.</p>
+    </div>
 
     <div class="card">
         <div id="loaderOverlay" class="loader-overlay">
@@ -267,7 +307,7 @@
         </div>
 
         <h1>Desktop Amazon Affiliate Link Generator</h1>
-        <p>[Not Guaranteed On Mobile/Tablets] Paste any Amazon product URL below. This tool will automatically add Shashwat's affiliate tag and create a clean link for you to share.</p>
+        <p>Paste any Amazon product URL below. This tool will automatically add Shashwat's affiliate tag and create a clean link for you to share.</p>
         
         <div class="input-group">
             <input
@@ -318,7 +358,7 @@
         const outputGroup = document.getElementById('outputGroup');
         const affiliateUrlOutput = document.getElementById('affiliateUrlOutput');
         const copyBtn = document.getElementById('copyBtn');
-        const openBtn = document.getElementById('openBtn'); // NEW
+        const openBtn = document.getElementById('openBtn');
         const themeToggle = document.getElementById('theme-toggle');
         const loaderOverlay = document.getElementById('loaderOverlay');
         const loadingMessageEl = document.getElementById('loadingMessage');
@@ -476,7 +516,7 @@
         // --- EVENT LISTENERS ---
         generateBtn.addEventListener('click', handleGeneration);
         copyBtn.addEventListener('click', copyToClipboard);
-        openBtn.addEventListener('click', openInNewTab); // NEW LISTENER
+        openBtn.addEventListener('click', openInNewTab);
         originalUrlInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') handleGeneration();
         });
