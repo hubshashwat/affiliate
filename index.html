@@ -151,6 +151,7 @@
                 6px 6px 12px var(--shadow-dark),
                 -6px -6px 12px var(--shadow-light);
             transition: all var(--transition-speed) ease;
+            white-space: nowrap; /* Prevents text wrapping on small screens */
         }
         
         #generateBtn:hover, .output-group button:hover:not(.copied) {
@@ -282,6 +283,7 @@
         <div id="outputGroup" class="output-group">
             <input type="text" id="affiliateUrlOutput" readonly />
             <button id="copyBtn">Copy</button>
+            <button id="openBtn">Open ↗</button>
         </div>
 
         <div class="important-note">
@@ -295,10 +297,7 @@
         // --- CONFIGURATION ---
         const YOUR_AFFILIATE_TAG = 'shashwat15-21';
         const API_BASE_URL = 'https://affiliate-backend-upvj.onrender.com';
-        
-        // UPDATED: Specific endpoint based on your curl command
         const API_ENDPOINT = '/api/get-product'; 
-        
         const MAX_WAIT_TIME_MS = 92000; // 92 Seconds
 
         const LOADING_MESSAGES = [
@@ -319,6 +318,7 @@
         const outputGroup = document.getElementById('outputGroup');
         const affiliateUrlOutput = document.getElementById('affiliateUrlOutput');
         const copyBtn = document.getElementById('copyBtn');
+        const openBtn = document.getElementById('openBtn'); // NEW
         const themeToggle = document.getElementById('theme-toggle');
         const loaderOverlay = document.getElementById('loaderOverlay');
         const loadingMessageEl = document.getElementById('loadingMessage');
@@ -390,7 +390,6 @@
                     reject(new Error("Timeout: 90s limit reached"));
                 }, MAX_WAIT_TIME_MS);
 
-                // UPDATED: Correct Endpoint and Body
                 fetch(`${API_BASE_URL}${API_ENDPOINT}`, {
                     method: 'POST',
                     headers: { 
@@ -407,7 +406,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    // UPDATED: Using 'affiliateLink' from your specific response structure
                     if (data && data.affiliateLink) {
                         resolve(data.affiliateLink);
                     } else {
@@ -470,9 +468,15 @@
             });
         }
 
+        function openInNewTab() {
+            if (!affiliateUrlOutput.value) return;
+            window.open(affiliateUrlOutput.value, '_blank');
+        }
+
         // --- EVENT LISTENERS ---
         generateBtn.addEventListener('click', handleGeneration);
         copyBtn.addEventListener('click', copyToClipboard);
+        openBtn.addEventListener('click', openInNewTab); // NEW LISTENER
         originalUrlInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') handleGeneration();
         });
