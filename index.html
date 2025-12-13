@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Affiliate Link Generator</title>
-    
+
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,25 +13,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; background: #000; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: #000;
+        }
 
         /* --- THEME VARIABLES (DARK MODE ONLY) --- */
         :root {
             --glass-bg: rgba(8, 8, 12, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            
+
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --input-bg: rgba(30, 41, 59, 0.6);
             --input-border: rgba(255, 255, 255, 0.1);
             --input-text: #e2e8f0;
 
-            --card-header-bg: rgba(0,0,0,0.3);
-            --footer-bg: rgba(0,0,0,0.3);
+            --card-header-bg: rgba(0, 0, 0, 0.3);
+            --footer-bg: rgba(0, 0, 0, 0.3);
             --footer-text: #64748b;
-            
+
             --info-box-bg: rgba(15, 23, 42, 0.6);
             --info-box-border: rgba(255, 255, 255, 0.05);
 
@@ -40,198 +51,455 @@
 
         /*LOADER (0-3s)*/
         #loader-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050510; z-index: 1000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050510;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             transition: opacity 1s cubic-bezier(0.7, 0, 0.3, 1), transform 1s cubic-bezier(0.7, 0, 0.3, 1);
         }
+
         .neon-circle {
-            width: 80px; height: 80px; border-radius: 50%; border: 2px solid #00f3ff;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #00f3ff;
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.2);
-            margin-bottom: 2rem; position: relative;
+            margin-bottom: 2rem;
+            position: relative;
             animation: pulseloader 1.5s infinite ease-in-out;
         }
+
         .neon-circle::after {
-            content: ''; position: absolute; inset: -15px; border: 1px dashed #ff00ff;
-            border-radius: 50%; opacity: 0.7; animation: spin 3s linear infinite;
+            content: '';
+            position: absolute;
+            inset: -15px;
+            border: 1px dashed #ff00ff;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: spin 3s linear infinite;
         }
+
         .neon-text {
-            font-family: 'Rajdhani', sans-serif; color: #fff; font-size: 1.8rem;
-            letter-spacing: 0.2em; font-weight: 700; text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
+            color: #fff;
+            font-size: 1.8rem;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            text-transform: uppercase;
         }
+
         .progress-bar-container {
-            width: 200px; height: 4px; background: rgba(255,255,255,0.1);
-            margin-top: 2rem; border-radius: 2px; overflow: hidden;
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+            border-radius: 2px;
+            overflow: hidden;
         }
+
         .progress-fill {
-            height: 100%; width: 100%;
+            height: 100%;
+            width: 100%;
             background: linear-gradient(90deg, #00f3ff, #ff00ff);
-            transform: translateX(-100%); animation: loadFill 3s linear forwards;
+            transform: translateX(-100%);
+            animation: loadFill 3s linear forwards;
         }
-        @keyframes pulseloader { 0%, 100% { box-shadow: 0 0 20px rgba(0,243,255,0.3); transform: scale(1); } 50% { box-shadow: 0 0 50px rgba(0,243,255,0.6); transform: scale(1.1); } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes loadFill { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
+
+        @keyframes pulseloader {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(0, 243, 255, 0.6);
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes loadFill {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
 
         /*APP (3s+)*/
         #app-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transform: scale(0.95);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.95);
             transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            background: #000; overflow: hidden;
+            background: #000;
+            overflow: hidden;
         }
+
         .video-bg {
-            position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
-            min-width: 100vw; min-height: 100vh; transform: translate(-50%, -50%);
-            z-index: 0; pointer-events: none;
-            filter: brightness(0.35) saturate(1.2) opacity(0); 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            min-width: 100vw;
+            min-height: 100vh;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(0.35) saturate(1.2) opacity(0);
             transition: filter 0.5s, opacity 2s;
         }
-        .video-bg video { width: 100%; height: 100%; object-fit: cover; }
-        body.active .video-bg { filter: brightness(0.35) saturate(1.2) opacity(1); }
+
+        .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        body.active .video-bg {
+            filter: brightness(0.35) saturate(1.2) opacity(1);
+        }
 
         .crystal-card {
-            position: relative; z-index: 10; width: 90%; max-width: 550px;
-            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 24px;
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 550px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             box-shadow: var(--glass-shadow), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            overflow: hidden; display: flex; flex-direction: column;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             transition: background 0.3s, border 0.3s;
         }
+
         .card-header {
-            padding: 1.5rem 2rem; border-bottom: 1px solid var(--glass-border);
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: var(--card-header-bg);
         }
-        .brand { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        .brand span { width: 8px; height: 8px; background: var(--accent-color); border-radius: 50%; box-shadow: 0 0 10px var(--accent-color); }
-        
-        .card-body { padding: 2.5rem 2rem; }
-        h2 { margin: 0 0 0.5rem 0; font-size: 1.8rem; color: var(--text-primary); letter-spacing: -0.02em; }
-        p.subtitle { margin: 0 0 2rem 0; color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem; }
 
-        .input-box { position: relative; margin-bottom: 1.5rem; }
-        .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
-        input {
-            width: 100%; padding: 1rem 1rem 1rem 3rem;
-            border: 1px solid var(--input-border); border-radius: 12px;
-            font-size: 1rem; background: var(--input-bg); color: var(--input-text);
-            transition: all 0.2s; font-family: inherit;
+        .brand {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+        .brand span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .card-body {
+            padding: 2.5rem 2rem;
+        }
+
+        h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            margin: 0 0 2rem 0;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--input-text);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
 
         .action-btn {
-            width: 100%; padding: 1rem;
-            background: var(--accent-color); color: white;
-            border: none; border-radius: 12px;
-            font-size: 1rem; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
             box-shadow: 0 4px 12px var(--accent-glow);
         }
-        .action-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
         /* SPINNER & STATUS MSG */
         .spinner {
-            width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%; border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite; display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
         }
-        button.loading .spinner { display: block; }
-        button.loading span { margin-left: 8px; }
-        
+
+        button.loading .spinner {
+            display: block;
+        }
+
+        button.loading span {
+            margin-left: 8px;
+        }
+
         .status-message {
-            margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);
-            text-align: center; min-height: 1.2em; transition: color 0.3s;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-height: 1.2em;
+            transition: color 0.3s;
         }
 
         .info-section {
-            margin-top: 2rem; background: var(--info-box-bg);
-            border: 1px solid var(--info-box-border); border-radius: 12px;
-            padding: 1rem; font-size: 0.85rem; color: var(--text-secondary);
+            margin-top: 2rem;
+            background: var(--info-box-bg);
+            border: 1px solid var(--info-box-border);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
-        .info-title { font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem; display: block; }
-        .info-text { margin-bottom: 0.8rem; line-height: 1.4; }
-        .info-text:last-child { margin-bottom: 0; }
-        .highlight { color: #f59e0b; font-weight: 500; }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .info-text {
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .info-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: #f59e0b;
+            font-weight: 500;
+        }
 
         .output-result {
-            margin-top: 1.5rem; background: var(--info-box-bg);
-            border-radius: 12px; padding: 1rem;
-            border: 1px solid var(--info-box-border); display: none; margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
+            background: var(--info-box-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--info-box-border);
+            display: none;
+            margin-bottom: 1.5rem;
         }
+
         .result-link {
-            font-size: 0.9rem; color: var(--accent-color); word-break: break-all;
-            margin-bottom: 0.8rem; display: block; text-decoration: none; font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            word-break: break-all;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            font-weight: 500;
         }
+
         .copy-trigger {
-            font-size: 0.8rem; background: transparent; border: 1px solid var(--input-border);
-            padding: 6px 15px; border-radius: 6px; cursor: pointer;
-            color: var(--text-secondary); transition: 0.2s;
+            font-size: 0.8rem;
+            background: transparent;
+            border: 1px solid var(--input-border);
+            padding: 6px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: 0.2s;
         }
-        .copy-trigger:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+
+        .copy-trigger:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
 
         .card-footer {
-            padding: 1rem 2rem; background: var(--footer-bg);
-            border-top: 1px solid var(--glass-border); font-size: 0.8rem;
-            color: var(--footer-text); display: flex; justify-content: space-between;
+            padding: 1rem 2rem;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.8rem;
+            color: var(--footer-text);
+            display: flex;
+            justify-content: space-between;
         }
-        
+
         .processing-bar {
-            height: 3px; width: 100%; background: var(--glass-border);
-            position: absolute; top: 0; left: 0; display: none;
+            height: 3px;
+            width: 100%;
+            background: var(--glass-border);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
         }
+
         .processing-fill {
-            height: 100%; width: 50%; background: var(--accent-color);
+            height: 100%;
+            width: 50%;
+            background: var(--accent-color);
             animation: processing 1s infinite linear;
         }
-        @keyframes processing { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
 
-        body.active #loader-layer { opacity: 0; pointer-events: none; transform: scale(1.1); }
-        body.active #app-layer { opacity: 1; transform: scale(1); }
-        
+        @keyframes processing {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+        body.active #loader-layer {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        body.active #app-layer {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         @media (max-width: 600px) {
-            .crystal-card { width: 95%; max-height: 90vh; overflow-y: auto; }
-            .card-body { padding: 1.5rem; }
+            .crystal-card {
+                width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- LOADER -->
     <div id="loader-layer">
         <div class="neon-circle"></div>
         <div class="neon-text">SYSTEM INITIALIZING</div>
-        <div class="progress-bar-container"><div class="progress-fill"></div></div>
+        <div class="progress-bar-container">
+            <div class="progress-fill"></div>
+        </div>
     </div>
 
     <!-- APP -->
     <div id="app-layer">
         <div class="video-bg">
-            <video autoplay loop muted playsinline><source src="./bg.mp4" type="video/mp4"></video>
+            <video autoplay loop muted playsinline>
+                <source src="./bg.mp4" type="video/mp4">
+            </video>
         </div>
 
         <div class="crystal-card">
-            <div class="processing-bar" id="processingBar"><div class="processing-fill"></div></div>
-            
+            <div class="processing-bar" id="processingBar">
+                <div class="processing-fill"></div>
+            </div>
+
             <div class="card-header">
                 <div class="brand"><span></span>Shashwat's Affiliate</div>
             </div>
-            
+
             <div class="card-body">
-                <p class="subtitle">Paste any Amazon product URL below. This tool will automatically add Shashwat's affiliate tag and create a clean link for you to share.</p>
-                
+                <p class="subtitle">Paste any Amazon product URL below. This tool will automatically add Shashwat's
+                    affiliate tag and create a clean link for you to share.</p>
+
                 <div class="input-box">
                     <span class="input-icon">🔗</span>
                     <input type="url" id="originalUrlInput" placeholder="Paste Amazon Product URL..." />
                 </div>
-                
+
                 <button id="generateBtn" class="action-btn">
                     <div class="spinner"></div>
                     <span id="btnText">Generate Secure Link</span>
                 </button>
-                
+
                 <div id="statusMessage" class="status-message"></div>
-                
+
                 <div id="errorMessage" style="display:none; color: #ef4444; font-size: 0.9rem; margin-top: 10px;"></div>
 
                 <div id="outputResult" class="output-result">
@@ -244,13 +512,16 @@
 
                 <div class="info-section">
                     <span class="info-title">Important Note:</span>
-                    <div class="info-text">If the link is used and a qualifying purchase within a <span class="highlight">24-hour window</span> is not made, the sale will not be credited to Shashwat's Amazon Associates account.</div>
-                    
+                    <div class="info-text">If the link is used and a qualifying purchase within a <span
+                            class="highlight">24-hour window</span> is not made, the sale will not be credited to
+                        Shashwat's Amazon Associates account.</div>
+
                     <span class="info-title">Excluded Products:</span>
-                    <div class="info-text">Occasionally, a product might be excluded. If the affiliate link shows the item as 'Currently Unavailable', simply use the original Amazon link instead.</div>
+                    <div class="info-text">Occasionally, a product might be excluded. If the affiliate link shows the
+                        item as 'Currently Unavailable', simply use the original Amazon link instead.</div>
                 </div>
             </div>
-            
+
             <div class="card-footer">
                 <span>System Status: Online</span>
                 <span>v0.0.1 (Dark)</span>
@@ -265,8 +536,8 @@
 
         const YOUR_AFFILIATE_TAG = 'shashwat15-21';
         const API_BASE_URL = 'https://affiliate-backend-upvj.onrender.com';
-        const API_ENDPOINT = '/api/get-product'; 
-        const MAX_WAIT_TIME_MS = 92000; 
+        const API_ENDPOINT = '/api/get-product';
+        const MAX_WAIT_TIME_MS = 92000;
 
         const generateBtn = document.getElementById('generateBtn');
         const btnText = document.getElementById('btnText');
@@ -284,7 +555,7 @@
             outputResult.style.display = 'none';
             statusMessage.textContent = '';
             copyBtn.textContent = 'Copy to Clipboard';
-            
+
             const originalUrl = originalUrlInput.value.trim();
             if (!originalUrl) {
                 showError('Please paste a valid Amazon URL.');
@@ -296,11 +567,11 @@
             generateBtn.disabled = true;
             generateBtn.classList.add('loading');
             btnText.textContent = 'Generating Secure Link...';
-            
+
             // Progressive Updates
             let seconds = 0;
             updateStatus("Initiating secure connection...");
-            
+
             const progressInterval = setInterval(() => {
                 seconds++;
                 if (seconds === 2) updateStatus("Contacting affiliate server...");
@@ -317,12 +588,16 @@
                 console.warn("Backend failed.", error);
                 updateStatus("Server timed out. Switching to Local Generation...");
                 await new Promise(r => setTimeout(r, 800));
-                
+
                 const localLink = generateLocalLink(originalUrl);
                 if (localLink) {
                     showSuccess(localLink);
                 } else {
-                    showError('Generation failed. Please check the URL.');
+                    if (originalUrl.includes('amzn.in') || originalUrl.includes('amzn.to')) {
+                        showError('Short links like amzn.in and amzn.to require the server. Please use the FULL URL (open the link and copy the address).');
+                    } else {
+                        showError('Generation failed. Please check the URL.');
+                    }
                 }
             } finally {
                 clearInterval(progressInterval);
@@ -330,8 +605,8 @@
                 generateBtn.disabled = false;
                 generateBtn.classList.remove('loading');
                 btnText.textContent = 'Generate Secure Link';
-                
-                if(outputResult.style.display === 'block') {
+
+                if (outputResult.style.display === 'block') {
                     statusMessage.textContent = 'Link generated successfully.';
                     setTimeout(() => statusMessage.textContent = '', 3000);
                 }
@@ -350,18 +625,18 @@
                     headers: { 'accept': 'application/json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: url })
                 })
-                .then(async res => {
-                    clearTimeout(timer);
-                    if (!res.ok) throw new Error("Server Error");
-                    return res.json();
-                })
-                .then(data => data && data.affiliateLink ? resolve(data.affiliateLink) : reject(new Error("Invalid Data")))
-                .catch(err => { clearTimeout(timer); reject(err); });
+                    .then(async res => {
+                        clearTimeout(timer);
+                        if (!res.ok) throw new Error("Server Error");
+                        return res.json();
+                    })
+                    .then(data => data && data.affiliateLink ? resolve(data.affiliateLink) : reject(new Error("Invalid Data")))
+                    .catch(err => { clearTimeout(timer); reject(err); });
             });
         }
 
         function generateLocalLink(originalUrl) {
-            const regex = /\/(dp|gp\/product)\/([A-Z0-9]{10})/;
+            const regex = /\/(dp|gp\/product|gp\/aw\/d)\/([A-Z0-9]{10})/;
             const match = originalUrl.match(regex);
             return match && match[2] ? `https://www.amazon.in/dp/${match[2]}/?tag=${YOUR_AFFILIATE_TAG}` : null;
         }
@@ -378,9 +653,9 @@
         }
 
         copyBtn.addEventListener('click', () => {
-             if (!resultLink.textContent) return;
-             navigator.clipboard.writeText(resultLink.textContent);
-             copyBtn.textContent = 'Copied!';
+            if (!resultLink.textContent) return;
+            navigator.clipboard.writeText(resultLink.textContent);
+            copyBtn.textContent = 'Copied!';
         });
 
         openBtn.addEventListener('click', () => {
@@ -396,4 +671,5 @@
 
     </script>
 </body>
+
 </html>
