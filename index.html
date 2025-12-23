@@ -599,7 +599,7 @@
                 } else {
                     // Check if it looks like a short link
                     if (originalUrl.includes('amzn.to') || originalUrl.includes('amzn.eu') || originalUrl.includes('/d/')) {
-                        showError('Backend offline. Cannot process short links locally. Please paste the full Amazon URL containing the ASIN.');
+                        showError('Backend offline because of Amazon server issues. Cannot process short links locally. Please paste the full Amazon URL by using a laptop.');
                     } else {
                         showError('Generation failed. Please check the URL.');
                     }
